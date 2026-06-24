@@ -1,4 +1,7 @@
-﻿namespace system_university
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace system_university
 {
     partial class Form1
     {

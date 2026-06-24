@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 
 namespace system_university
@@ -19,7 +20,6 @@ namespace system_university
 
         public int GetMaxId(string tableName, string idColumn)
         {
-            // يجب التحقق من صحة المدخلات
             if (string.IsNullOrWhiteSpace(tableName)) throw new ArgumentException("Table name cannot be empty");
             if (string.IsNullOrWhiteSpace(idColumn)) throw new ArgumentException("ID column cannot be empty");
 
@@ -116,7 +116,6 @@ namespace system_university
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
 
-                //   الاستعلام يشمل البحث بالاسم أو ID
                 string query = @"SELECT st_id, st_name AS Name, st_phone AS Phone, st_email AS Email, st_birth_of_date AS BirthDate, st_address AS Address,
                                 CASE WHEN st_gender = 1 THEN 'Male' ELSE 'Female' END AS Gender
                                 FROM Students
@@ -150,7 +149,6 @@ namespace system_university
 
 
 
-        // دالة ترجع قيمة واحدة (مثلا عدد الطلاب)
         public static object ExecuteScalar(string query)
         {
             SqlConnection conn = new SqlConnection(ConnectionString);
@@ -170,7 +168,7 @@ namespace system_university
 
         // staff
 
-        // LoadDepartments داخل ComboBox
+        // LoadDepartments =>ComboBox
 
         public DataTable LoadDepartments()
         {
@@ -259,10 +257,8 @@ namespace system_university
         //AddStaff
         public void AddStaff(Staff stf)
         {
-            // تحقق أولاً من وجود d_code في جدول Departments
             if (stf == null) throw new ArgumentNullException(nameof(stf));
 
-            // يجب التحقق من وجود المنصب أيضا
             bool isPositionExists = CheckIfPositionExists(stf.stf_p_id);
             if (!isPositionExists)
             {
@@ -278,7 +274,7 @@ namespace system_university
                                     VALUES (@s_id, @name, @phone, @email, @salary, @hire_date, @d_code, @stf_p_id)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@s_id", stf.s_id); // بس في الاستعلام @s_id
+                cmd.Parameters.AddWithValue("@s_id", stf.s_id); 
                 cmd.Parameters.AddWithValue("@name", stf.s_name);
                 cmd.Parameters.AddWithValue("@phone", stf.s_phone);
                 cmd.Parameters.AddWithValue("@email", stf.s_email);
@@ -309,7 +305,6 @@ namespace system_university
         {
             if (stf == null) throw new ArgumentNullException(nameof(stf));
 
-            // تحقق من القسم
             bool deptExists = CheckIfDepartmentExists(stf.d_code);
             if (!deptExists)
             {
@@ -317,7 +312,6 @@ namespace system_university
                 return;
             }
 
-            // تحقق من المنصب
             bool positionExists = CheckIfPositionExists(stf.stf_p_id);
             if (!positionExists)
             {
